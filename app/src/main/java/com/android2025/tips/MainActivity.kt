@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -15,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.tooling.preview.Preview
 import com.android2025.tips.ui.theme.HacksTheme
+import com.android2025.tips.utils.material3.MultiplechoiceButtonGroup
+import com.android2025.tips.utils.material3.SinglechoiceButtonGroup
 import com.android2025.tips.utils.material3.SplitButtons
 import com.android2025.tips.widgets.AnimationsSample
 import com.android2025.tips.widgets.GesturesSamples
@@ -30,14 +34,17 @@ class MainActivity : ComponentActivity() {
             HacksTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize()
-                ) {
-                    Box(
+                ) { innerPadding ->
+                    Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(it),
-                        contentAlignment = Alignment.Center
+                            .padding(innerPadding),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
-                        SplitButtons()
+//                        SplitButtons()
+                        SinglechoiceButtonGroup()
+                        MultiplechoiceButtonGroup()
                     }
                 }
             }
@@ -49,6 +56,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     HacksTheme {
-        SplitButtons()
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+//        SinglechoiceButtonGroup()
+            MultiplechoiceButtonGroup()
+        }
     }
 }
