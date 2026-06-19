@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +20,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.tooling.preview.Preview
 import com.android2025.tips.ui.theme.HacksTheme
 import com.android2025.tips.utils.material3.FabMenu
+import com.android2025.tips.utils.material3.LoadingIndicators
 import com.android2025.tips.utils.material3.MultiplechoiceButtonGroup
 import com.android2025.tips.utils.material3.SinglechoiceButtonGroup
 import com.android2025.tips.utils.material3.SplitButtons
@@ -39,16 +42,19 @@ class MainActivity : ComponentActivity() {
                         FabMenu()
                     }
                 ) { innerPadding ->
+                    val scrollState = rememberScrollState()
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(innerPadding),
+                            .padding(innerPadding)
+                            .verticalScroll(scrollState),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-//                        SplitButtons()
+                        SplitButtons()
                         SinglechoiceButtonGroup()
                         MultiplechoiceButtonGroup()
+                        LoadingIndicators()
                     }
                 }
             }
