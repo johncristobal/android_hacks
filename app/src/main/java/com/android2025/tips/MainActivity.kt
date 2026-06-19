@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.tooling.preview.Preview
 import com.android2025.tips.ui.theme.HacksTheme
+import com.android2025.tips.utils.material3.FabMenu
 import com.android2025.tips.utils.material3.MultiplechoiceButtonGroup
 import com.android2025.tips.utils.material3.SinglechoiceButtonGroup
 import com.android2025.tips.utils.material3.SplitButtons
@@ -33,7 +34,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             HacksTheme {
                 Scaffold(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    floatingActionButton = {
+                        FabMenu()
+                    }
                 ) { innerPadding ->
                     Column(
                         modifier = Modifier
