@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,9 +21,11 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.tooling.preview.Preview
 import com.android2025.tips.ui.theme.HacksTheme
 import com.android2025.tips.utils.material3.FabMenu
+import com.android2025.tips.utils.material3.FloatingToolbar
 import com.android2025.tips.utils.material3.LoadingIndicators
 import com.android2025.tips.utils.material3.MultiplechoiceButtonGroup
 import com.android2025.tips.utils.material3.SinglechoiceButtonGroup
+import com.android2025.tips.utils.material3.Sliders
 import com.android2025.tips.utils.material3.SplitButtons
 import com.android2025.tips.widgets.AnimationsSample
 import com.android2025.tips.widgets.GesturesSamples
@@ -55,6 +58,9 @@ class MainActivity : ComponentActivity() {
                         SinglechoiceButtonGroup()
                         MultiplechoiceButtonGroup()
                         LoadingIndicators()
+                        Sliders()
+                        FloatingToolbar()
+                        FloatingToolbar()
                     }
                 }
             }
@@ -67,8 +73,7 @@ class MainActivity : ComponentActivity() {
 fun GreetingPreview() {
     HacksTheme {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-//        SinglechoiceButtonGroup()
-            MultiplechoiceButtonGroup()
+            Sliders()
         }
     }
 }
