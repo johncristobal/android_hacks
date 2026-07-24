@@ -32,10 +32,17 @@ import com.android2025.tips.widgets.GesturesSamples
 import com.android2025.tips.widgets.ModalBottomSheetExample
 import com.android2025.tips.widgets.ScaffoldExample
 import com.android2025.tips.widgets.VisualsExample
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
         setContent {
             HacksTheme {
