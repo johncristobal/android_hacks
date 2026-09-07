@@ -20,8 +20,20 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
 
 class CorautineDemoActivity : AppCompatActivity() {
+    private val api: MyApi by lazy {
+        Retrofit.Builder()
+            .baseUrl("https://jsonplaceholder.typicode.com")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(MyApi::class.java)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -193,7 +205,7 @@ class CorautineDemoActivity : AppCompatActivity() {
     // 8. retrofit
     private fun retrofitDemo() {
         GlobalScope.launch(Dispatchers.IO) {
-            val response = api.getComments().awaitResponse()
+            val response = api.getComments()
             if(response.isSuccessful) {
                 val data = response.body()!!
                 withContext(Dispatchers.Main) {
@@ -215,8 +227,12 @@ data class Person(
     val age: Int
 )
 
+data class Comments(
+    val id: Int,
+    val body: String
+)
+
 interface MyApi {
     @GET("/comments")
-    suspend fun getComments() Call<List<Comments>>
-    suspend fun getComments() Response<List<Comments>>
+    suspend fun getComments(): Response<List<Comments>>
 }
