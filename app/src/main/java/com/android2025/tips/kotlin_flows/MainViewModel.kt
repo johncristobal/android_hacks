@@ -2,6 +2,9 @@ package com.android2025.tips.kotlin_flows
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.android2025.tips.kotlin_flows.models.Post
+import com.android2025.tips.kotlin_flows.models.ProfileState
+import com.android2025.tips.kotlin_flows.models.User
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,12 +12,14 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.fold
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.reduce
@@ -30,7 +35,7 @@ class MainViewModel: ViewModel() {
     val sharedFlow = _sharedFlow.asSharedFlow()
 
     val countDownFlow = flow<Int> {
-        val start = 10
+        val start = 5
         var currentValue = start
         emit(start)
 
@@ -41,7 +46,59 @@ class MainViewModel: ViewModel() {
         }
     }
 
+    /*
+    Combine, Zip & Merge
+        Combine: combine the flow with another flow
+            when one of the flows changes, the combine function will be called
+
+        Zip: combine the flow with another flow
+            when BOTH flows change, the zip function will be called
+
+        Merge: merge as many flows as you want
+            when ONE of the flows changes, the merge function will be called
+
+     */
+
+    private val isAuthenticated = MutableStateFlow(true)
+    private val user = MutableStateFlow<User?>(null)
+    private val posts = MutableStateFlow(emptyList<Post>())
+
+    private val _profileState = MutableStateFlow<ProfileState?>(null)
+    val profileState = _profileState.asStateFlow()
+
     init {
+//        user.combine(posts) { user, posts ->
+//            _profileState.value = profileState.value?.copy(
+//                profilePicUrl = user?.profilePicUrl,
+//                username = user?.username,
+//                description = user?.description,
+//                posts = posts
+//            )
+//        }.combine(isAuthenticated) { posts, auth ->
+//            if (auth) { _profileState.value } else { null }
+//        }.launchIn(viewModelScope)
+
+        isAuthenticated.combine(user) { isAuthenticated, user ->
+            if (isAuthenticated) user else null
+        }.combine(posts) { user, posts ->
+            user?.let {
+                _profileState.value = profileState.value?.copy(
+                    profilePicUrl = user.profilePicUrl,
+                    username = user.username,
+                    description = user.description,
+                    posts = posts
+                )
+            }
+        }.launchIn(viewModelScope)
+
+        /*
+            .launchIn(viewModelScope)
+                equal to
+            viewmodelScope.launch {
+
+            }
+         */
+
 //        collectFlow()
 //        squareNumber(3)
         viewModelScope.launch {
@@ -57,6 +114,8 @@ class MainViewModel: ViewModel() {
                 println("SECOND FLOW: The received number is $it")
             }
         }
+
+
     }
 
     /*

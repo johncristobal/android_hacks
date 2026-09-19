@@ -55,6 +55,10 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.5.0-alpha21")
     implementation("com.google.firebase:firebase-firestore:25.1.4")
 
+    testImplementation("app.cash.turbine:turbine:1.0.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("com.google.truth:truth:1.1.5")
+
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material)
     implementation(libs.firebase.common)
