@@ -59,32 +59,32 @@ class MainActivity : ComponentActivity() {
                     }
                 ) { innerPadding ->
 //                    widgetsMaterialDemo(innerPadding)
+//                    flowsBootcamp(innerPadding)
 
-                    val viewModel = viewModel<MainViewModel>()
-                    val time = viewModel.countDownFlow.collectAsState(initial = 10)
 
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding),
-                        contentAlignment = Alignment.Center
-                    ) {
-//                        Text(
-//                            text = time.value.toString(),
-//                            fontSize = 30.sp,
-//                            modifier = Modifier
-//                                .align(Alignment.Center)
-//                        )
-                        val count = viewModel.stateFlow.collectAsState()
-                        Button(
-                            onClick = {
-                                viewModel.incrementCounter()
-                            }
-                        ) {
-                            Text(text = "Counter: ${count.value}")
-                        }
-                    }
                 }
+            }
+        }
+    }
+
+    @Composable
+    private fun flowsBootcamp(innerPadding: PaddingValues) {
+        val viewModel = viewModel<MainViewModel>()
+        val time = viewModel.countDownFlow.collectAsState(initial = 10)
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            contentAlignment = Alignment.Center
+        ) {
+            val count = viewModel.stateFlow.collectAsState()
+            Button(
+                onClick = {
+                    viewModel.incrementCounter()
+                }
+            ) {
+                Text(text = "Counter: ${count.value}")
             }
         }
     }

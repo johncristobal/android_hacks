@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.androidx.room)
 }
 
 android {
@@ -35,6 +38,11 @@ android {
     }
 }
 
+room {
+    // Exported schemas are committed and used by MigrationTestHelper in instrumented tests
+    schemaDirectory("$projectDir/schemas")
+}
+
 dependencies {
 
     implementation(libs.androidx.activity.ktx)
@@ -54,6 +62,21 @@ dependencies {
     implementation("com.google.accompanist:accompanist-pager-indicators:0.36.0")
     implementation("androidx.compose.material3:material3:1.5.0-alpha21")
     implementation("com.google.firebase:firebase-firestore:25.1.4")
+
+    // To-do app
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose)
+    androidTestImplementation(libs.androidx.room.testing)
+    androidTestImplementation("com.google.truth:truth:1.1.5")
 
     testImplementation("app.cash.turbine:turbine:1.0.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
