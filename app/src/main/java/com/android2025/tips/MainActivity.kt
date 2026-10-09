@@ -43,6 +43,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.android2025.tips.navigation3.navigation.NavigationRoot
 
 class MainActivity : ComponentActivity() {
 
@@ -54,14 +55,16 @@ class MainActivity : ComponentActivity() {
             HacksTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    floatingActionButton = {
-                        FabMenu()
-                    }
+//                    floatingActionButton = {
+//                        FabMenu()
+//                    }
                 ) { innerPadding ->
 //                    widgetsMaterialDemo(innerPadding)
 //                    flowsBootcamp(innerPadding)
-
-
+                    NavigationRoot(
+                        modifier = Modifier
+                            .padding(innerPadding)
+                    )
                 }
             }
         }
