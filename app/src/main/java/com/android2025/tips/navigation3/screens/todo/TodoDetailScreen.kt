@@ -1,4 +1,4 @@
-package com.android2025.tips.navigation3.screens
+package com.android2025.tips.navigation3.screens.todo
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
