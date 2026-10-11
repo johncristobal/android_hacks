@@ -1,90 +1,92 @@
 package com.android2025.tips.navigation3.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
-import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.runtime.rememberNavBackStack
-import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import androidx.savedstate.serialization.SavedStateConfiguration
 import com.android2025.tips.navigation3.screens.auth.AuthNavigation
-import com.android2025.tips.navigation3.screens.todo.TodoNavigation
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.polymorphic
-
-/*
-    Navigation3
-        https://developer.android.com/jetpack/compose/navigation
-
-    Routes
-        - creamos routes para las pantallas, ojo con NavKey y Route
-        - podemos ewnvair data, string, etc
-
-    Creamos vistas con composables
-    creamos viewmodels para estas vistas
-        - recuerda stateFlow para enviar data
-        - sharedflow para eventos: click, etc
-
-    NavigationRoot - el bueno
-        - ojo con las configs
-        - polymorphic para multiplatform
-    NavDisplay
-        - entrydecoratos paraeliminar viewmodels
-        - entryprovider para definir rutas
- */
-
-/*
-    Nested Nav Graph & shared viewmodels
-        Auth and Todo Route
-        - in cada uno definimos rutas especificas para sus vistas
-        authNavigation and TodoNavigation
-        - definimos navegacion para auth y para todo
-        - en auth, ejemplo de sharedviewmodel para copartir entre login y register
-        - backStack para add o remove
-        - OJO - definimos onclick en screen para que se maneje en la navigation
-
-    Recuerda
-        - entryDecorators para eliminar viewmodels
-        - entryProvider para definir rutas, checa codigo
- */
+import com.android2025.tips.navigation3.screens.todo.TodoDetailScreen
+import com.android2025.tips.navigation3.screens.todo.TodoListScreen
+import com.android2025.tips.navigation3.screens.todo.TodoNavigationBar
 
 @Composable
 fun NavigationRoot(
     modifier: Modifier = Modifier
 ) {
-    val rootBack = rememberNavBackStack(
-        configuration = SavedStateConfiguration{
-            serializersModule = SerializersModule {
-                polymorphic(NavKey::class) {
-                    subclass(Route.Auth::class, Route.Auth.serializer())
-                    subclass(Route.Todo::class, Route.Todo.serializer())
-                }
-            }
-        },
-        Route.Auth
+    val navigationState = rememberNavState(
+        startRoute = Route.Auth,
+        topLevelRoute = TOP_LEVEL_DESTINATIONS.keys
     )
 
-    NavDisplay(
+    val navigator = remember {
+        Navigator(navigationState)
+    }
+
+    Scaffold(
         modifier = modifier,
-        entryDecorators = listOf(
-            rememberSaveableStateHolderNavEntryDecorator(),
-            rememberViewModelStoreNavEntryDecorator()
-        ),
-        backStack = rootBack,
-        entryProvider = entryProvider {
-            entry<Route.Auth> {
-                AuthNavigation(
-                    onLogin = {
-                        rootBack.remove(Route.Auth)
-                        rootBack.add(Route.Todo)
+        bottomBar = {
+            if (navigationState.topLevelRoute != Route.Auth) {
+                TodoNavigationBar(
+                    selectedKey = navigationState.topLevelRoute,
+                    onSelectedKey = {
+                        navigator.navigate(it)
                     }
                 )
             }
-            entry<Route.Todo> {
-                TodoNavigation()
-            }
         }
-    )
+    ) { paddingValues ->
+        NavDisplay(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            onBack = {
+                navigator.goBack()
+            },
+            entries = navigationState.toEntries(
+                entryProvider = entryProvider {
+                    entry<Route.Auth> {
+                        AuthNavigation(
+                            onLogin = {
+                                navigator.navigate(Route.Todo.TodoList)
+                            }
+                        )
+                    }
+                    entry<Route.Todo.TodoList> {
+                        TodoListScreen(
+                            onTodoClick = {
+                                navigator.navigate(Route.Todo.TodoDetail(it))
+                            }
+                        )
+                    }
+                    entry<Route.Todo.TodoFavs> {
+                        TodoListScreen(
+                            onTodoClick = {
+                                navigator.navigate(Route.Todo.TodoDetail(it))
+                            }
+                        )
+                    }
+                    entry<Route.Todo.TodoDetail> { key ->
+                        TodoDetailScreen(
+                            todo = key.todo
+                        )
+                    }
+                    entry<Route.Todo.Settings> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("Settings")
+                        }
+                    }
+                }
+            )
+        )
+    }
 }

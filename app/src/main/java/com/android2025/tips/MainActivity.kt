@@ -53,19 +53,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             HacksTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-//                    floatingActionButton = {
-//                        FabMenu()
-//                    }
-                ) { innerPadding ->
-//                    widgetsMaterialDemo(innerPadding)
-//                    flowsBootcamp(innerPadding)
-                    NavigationRoot(
-                        modifier = Modifier
-                            .padding(innerPadding)
-                    )
-                }
+                NavigationRoot()
             }
         }
     }

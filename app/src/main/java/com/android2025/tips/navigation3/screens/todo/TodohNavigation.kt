@@ -1,37 +1,25 @@
 package com.android2025.tips.navigation3.screens.todo
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
-import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import androidx.savedstate.serialization.SavedStateConfiguration
 import com.android2025.tips.navigation3.navigation.Route
-import com.android2025.tips.navigation3.screens.auth.LoginScreen
-import com.android2025.tips.navigation3.screens.auth.RegisterScreen
-import com.android2025.tips.navigation3.viewmodels.LoginViewModel
-import com.android2025.tips.navigation3.viewmodels.RegisterViewModel
-import com.android2025.tips.navigation3.viewmodels.SharedAuthViewModel
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.polymorphic
+import com.android2025.tips.navigation3.navigation.serializers
 
 @Composable
 fun TodoNavigation(
     modifier: Modifier = Modifier,
 ) {
     val todoBackStack = rememberNavBackStack(
-        configuration = SavedStateConfiguration{
-            serializersModule = SerializersModule {
-                polymorphic(NavKey::class) {
-                    subclass(Route.Todo.TodoList::class, Route.Todo.TodoList.serializer())
-                    subclass(Route.Todo.TodoDetail::class, Route.Todo.TodoDetail.serializer())
-                }
-            }
-        },
+        configuration = serializers,
         Route.Todo.TodoList
     )
 
@@ -54,6 +42,22 @@ fun TodoNavigation(
                 TodoDetailScreen(
                     todo = key.todo
                 )
+            }
+            entry<Route.Todo.TodoFavs> {
+                TodoListScreen(
+                    onTodoClick = {
+                        todoBackStack.add(Route.Todo.TodoDetail(it))
+                    }
+                )
+            }
+            entry<Route.Todo.Settings> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Settings")
+                }
             }
         }
     )

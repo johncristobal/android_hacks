@@ -10,10 +10,10 @@ sealed interface Route: NavKey {
     data object Auth: Route, NavKey {
 
         @Serializable
-        data object Login: NavKey
+        data object Login: Route, NavKey
 
         @Serializable
-        data object Register: NavKey
+        data object Register: Route, NavKey
     }
 
     @Serializable
@@ -22,7 +22,13 @@ sealed interface Route: NavKey {
         data object TodoList: Route, NavKey
 
         @Serializable
+        data object TodoFavs: Route, NavKey
+
+        @Serializable
         data class TodoDetail(val todo: String): Route, NavKey
+
+        @Serializable
+        data object Settings: Route, NavKey
     }
 
 }

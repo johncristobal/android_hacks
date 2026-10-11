@@ -4,18 +4,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
-import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import androidx.savedstate.serialization.SavedStateConfiguration
 import com.android2025.tips.navigation3.navigation.Route
+import com.android2025.tips.navigation3.navigation.serializers
 import com.android2025.tips.navigation3.viewmodels.LoginViewModel
 import com.android2025.tips.navigation3.viewmodels.RegisterViewModel
 import com.android2025.tips.navigation3.viewmodels.SharedAuthViewModel
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.polymorphic
 
 @Composable
 fun AuthNavigation(
@@ -23,14 +20,7 @@ fun AuthNavigation(
     onLogin: () -> Unit,
 ) {
     val authBackStack = rememberNavBackStack(
-        configuration = SavedStateConfiguration{
-            serializersModule = SerializersModule {
-                polymorphic(NavKey::class) {
-                    subclass(Route.Auth.Login::class, Route.Auth.Login.serializer())
-                    subclass(Route.Auth.Register::class, Route.Auth.Register.serializer())
-                }
-            }
-        },
+        configuration = serializers,
         Route.Auth.Login
     )
 
