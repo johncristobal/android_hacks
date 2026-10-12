@@ -1,17 +1,16 @@
 package com.android2025.tips.navigation3.navigation
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import com.android2025.tips.navigation3.screens.auth.AuthNavigation
+import com.android2025.tips.navigation3.screens.settings.ChangeSettingScreen
+import com.android2025.tips.navigation3.screens.settings.SettingsScreen
 import com.android2025.tips.navigation3.screens.todo.TodoDetailScreen
 import com.android2025.tips.navigation3.screens.todo.TodoListScreen
 import com.android2025.tips.navigation3.screens.todo.TodoNavigationBar
@@ -28,6 +27,8 @@ fun NavigationRoot(
     val navigator = remember {
         Navigator(navigationState)
     }
+
+    val resultStore = rememberResultStore()
 
     Scaffold(
         modifier = modifier,
@@ -77,13 +78,21 @@ fun NavigationRoot(
                             todo = key.todo
                         )
                     }
-                    entry<Route.Todo.Settings> {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text("Settings")
-                        }
+                    entry<Route.Settings.SettingsHome> {
+                        SettingsScreen(
+                            resultStore = resultStore,
+                            onChangeSettingClick = {
+                                navigator.navigate(Route.Settings.ChangeSetting)
+                            }
+                        )
+                    }
+                    entry<Route.Settings.ChangeSetting> {
+                        ChangeSettingScreen(
+                            resultStore = resultStore,
+                            onSave = {
+                                navigator.goBack()
+                            }
+                        )
                     }
                 }
             )

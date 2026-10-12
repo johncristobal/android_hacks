@@ -21,7 +21,7 @@ val TOP_LEVEL_DESTINATIONS = mapOf(
         icon = Icons.Outlined.Favorite,
         title = "Favs"
     ),
-    Route.Todo.Settings to BottomNavItem(
+    Route.Settings.SettingsHome to BottomNavItem(
         icon = Icons.Default.Settings,
         title = "Settings"
     )

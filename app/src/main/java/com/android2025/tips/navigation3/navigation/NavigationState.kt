@@ -79,7 +79,9 @@ val serializers = SavedStateConfiguration {
             subclass(Route.Todo.TodoList::class, Route.Todo.TodoList.serializer())
             subclass(Route.Todo.TodoFavs::class, Route.Todo.TodoFavs.serializer())
             subclass(Route.Todo.TodoDetail::class, Route.Todo.TodoDetail.serializer())
-            subclass(Route.Todo.Settings::class, Route.Todo.Settings.serializer())
+            subclass(Route.Settings::class, Route.Settings.serializer())
+            subclass(Route.Settings.SettingsHome::class, Route.Settings.SettingsHome.serializer())
+            subclass(Route.Settings.ChangeSetting::class, Route.Settings.ChangeSetting.serializer())
         }
     }
 }

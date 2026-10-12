@@ -50,15 +50,6 @@ fun TodoNavigation(
                     }
                 )
             }
-            entry<Route.Todo.Settings> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Settings")
-                }
-            }
         }
     )
 }
